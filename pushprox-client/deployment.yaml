@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pushprox-client
+  namespace: kube-system
+  labels:
+    app: pushprox-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pushprox-client
+  template:
+    metadata:
+      namespace: kube-system
+      labels:
+        app: pushprox-client
+    spec:
+      containers:
+      - name: pushprox-client
+        image: camptocamp/pushprox
+        command: ["/app/client"]
+        args: ["--fqdn=vagrant.vm", "--proxy-url=http://192.168.1.109/"]
