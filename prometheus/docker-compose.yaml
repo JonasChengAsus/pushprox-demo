@@ -18,7 +18,6 @@ services:
     command: --path.rootfs=/hostfs
 
   pushprox-proxy:
-    image: camptocamp/pushprox
+    image: jonascheng/pushprox
     ports:
       - 80:8080
-

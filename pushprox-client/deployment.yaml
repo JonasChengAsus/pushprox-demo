@@ -18,6 +18,7 @@ spec:
     spec:
       containers:
       - name: pushprox-client
-        image: camptocamp/pushprox
+        image: jonascheng/pushprox
         command: ["/app/client"]
         args: ["--fqdn=vagrant.vm", "--proxy-url=http://192.168.1.109/"]
+      hostNetwork: true

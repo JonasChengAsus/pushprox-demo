@@ -5,38 +5,59 @@ vagrant up
 vagrant ssh
 ```
 
-If you bring up a box based on this Vagrantfile, you should have a node with Kubernetes up and running! 
-But there are a couple of final steps required before your Kubernetes node will be ready to run your workloads.
+If you bring up a box based on this Vagrantfile, you should have a node with Kubernetes up and running!
+But there are a couple of final steps required before your Kubernetes node will be ready to run demo.
 
-## Install a pod network
-
-As per the official docs you need to install a CNI-based [pod network add-on](https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/#pod-network). 
+# Provisioning the rest
 
 ```bash
-vagrant@vagrant:~$ kubectl apply -f https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')
+vagrant@vagrant:~$ /vagrant/provisioning.sh
 ```
 
-## Allow pods to run on the master node
-
-By default master nodes get a taint which prevents regular workloads being scheduled on them. Since we only have one node in this cluster, we want to remove that taint.
+## Access to both prometheus-node-exporter and kube-state-metrics
 
 ```bash
-vagrant@vagrant:~$ kubectl taint nodes --all node-role.kubernetes.io/master-
+vagrant@vagrant:~$ curl 127.0.0.1:30091
+vagrant@vagrant:~$ curl 127.0.0.1:30080
 ```
 
-# Install kube-state-metrics in K8S
-
-## Install the Chart
+The output looks below
 
 ```bash
-vagrant@vagrant:~$ helm install stable/kube-state-metrics --set service.type=NodePort --set service.nodePort=30080
+<html>
+<head><title>Node Exporter</title></head>
+<body>
+<h1>Node Exporter</h1>
+<p><a href="/metrics">Metrics</a></p>
+</body>
+</html>
 ```
 
-# Install prometheus-node-exporter in K8S
+# Setup PushProx
 
-## Install the Chart
+Revise `--proxy-url=http://192.168.1.109/` to pushprox-proxy IP
 
 ```bash
-vagrant@vagrant:~$ helm install --name my-release stable/prometheus-node-exporter --set service.type=NodePort --set service.nodePort=30091
+vagrant@vagrant:~$ cd /vagrant/pushprox-client
+vagrant@vagrant:~$ nano deployment.yaml
+vagrant@vagrant:~$ kubectl apply -f deployment.yaml
+vagrant@vagrant:~$ exit
 ```
 
+# Setup Prometheus
+
+```bash
+cd prometheus
+docker-compose up
+```
+
+Open browser to visit http://127.0.0.1:9090
+
+# Workaround to fix K8S stop running after restarting Vagrant
+
+```bash
+vagrant@vagrant:~$ sudo -i
+vagrant@vagrant:~$ swapoff -a
+vagrant@vagrant:~$ exit
+vagrant@vagrant:~$ strace -eopenat kubectl version
+```
