@@ -1,3 +1,7 @@
+# Demo Architecture
+
+![Demo Architecture](https://raw.githubusercontent.com/JonasChengAsus/pushprox-demo/master/doc/architecture.png)
+
 # Bring up K8S master node based on Vagrantfile
 
 ```bash
@@ -52,6 +56,23 @@ docker-compose up
 ```
 
 Open browser to visit http://127.0.0.1:9090
+
+# Gotcha
+
+* FQDN has to be unique to PushProx Proxy
+
+```bash
+sudo nano /etc/hostname
+# Ex: rc-jakarta-xxx-01
+sudo hostname -F /etc/hostname
+sudo nano /etc/hosts
+# Ex: 127.0.1.1	 rc-jakarta-xxx-01.retail.aics	 rc-jakarta-xxx-01
+```
+
+* PushProx Client has to set `hostNetwork=true`
+
+  * FQDN can be resolved local host which is 127.0.0.1 or 127.0.1.1
+  * PushProx Client can use the node network namespace
 
 # Workaround to fix K8S stop running after restarting Vagrant
 
