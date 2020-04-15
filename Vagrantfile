@@ -15,5 +15,5 @@ Vagrant.configure("2") do |config|
   # Specify the shared folder mounted from the host if you like
   # By default you get "." synced as "/vagrant"
   # config.vm.synced_folder ".", "/folder"
-  config.vm.provision "shell", path: "root.provisioning.sh"
+  config.vm.provision "shell", path: "vagrant.sh"
 end
