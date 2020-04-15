@@ -43,14 +43,14 @@ echo This VM has IP address $IPADDR
 NODENAME=$(hostname -s)
 # kubeadm init --apiserver-cert-extra-sans=$IPADDR --node-name $NODENAME
 kubeadm init --apiserver-cert-extra-sans=localhost
-# Set up admin creds for the user
-echo Copying credentials to /home/user...
-sudo --user=$user mkdir -p /home/$user/.kube
-cp -i /etc/kubernetes/admin.conf /home/$user/.kube/config
-chown $(id -u $user):$(id -g $user) /home/$user/.kube/config
 
 if [ -e $provision ]
 then
+# Set up admin creds for the user
+  echo Copying credentials to /home/user...
+  sudo --user=$user mkdir -p /home/$user/.kube
+  cp -i /etc/kubernetes/admin.conf /home/$user/.kube/config
+  chown $(id -u $user):$(id -g $user) /home/$user/.kube/config
   # Writing the IP address to a file in the shared folder
   echo $IPADDR > /vagrant/ip-address.txt
 fi
