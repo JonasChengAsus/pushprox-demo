@@ -33,7 +33,7 @@ cp /etc/fstab /etc/fstab.bak
 sudo sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
 # sed -i '/ExecStart=/a Environment="KUBELET_EXTRA_ARGS=--cgroup-driver=cgroupfs"' /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
 cp /etc/systemd/system/kubelet.service.d/10-kubeadm.conf /etc/systemd/system/kubelet.service.d/10-kubeadm.conf.bak
-sed -i '0,/ExecStart=/ s/ExecStart=/Environment="KUBELET_EXTRA_ARGS=--cgroup-driver=cgroupfs"/' /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+sed -i '0,/ExecStart=/ s//Environment="KUBELET_EXTRA_ARGS=--cgroup-driver=cgroupfs"\n&/' /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
 
 # Get the IP address that VirtualBox has given this VM
 IPADDR=`ifconfig eth1 | grep -i Mask | awk '{print $2}'| cut -f2 -d:`

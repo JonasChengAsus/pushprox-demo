@@ -20,5 +20,5 @@ spec:
       - name: pushprox-client
         image: jonascheng/pushprox
         command: ["/app/client"]
-        args: ["--fqdn=vagrant.vm", "--proxy-url=http://192.168.1.109/"]
+        args: ["--fqdn=vagrant.vm", "--proxy-url=http://172.20.10.2/"]
       hostNetwork: true
