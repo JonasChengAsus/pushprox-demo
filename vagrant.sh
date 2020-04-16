@@ -42,7 +42,7 @@ echo This VM has IP address $IPADDR
 # Set up Kubernetes
 NODENAME=$(hostname -s)
 # kubeadm init --apiserver-cert-extra-sans=$IPADDR --node-name $NODENAME
-kubeadm init --apiserver-cert-extra-sans=localhost
+kubeadm init
 
 if [ -e $provision ]
 then
